@@ -1,0 +1,421 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Guía de Prácticas #4: Análisis de Algoritmos de Ordenamiento</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <!-- Paleta Elegida: Calm Harmony -->
+    <!-- Estructura: Diseño de panel de control (dashboard) con navegación fija lateral para acceso no lineal y rápido a las secciones. -->
+    <style>
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: #F8F7F4;
+            color: #333;
+        }
+        .chart-container {
+            position: relative;
+            width: 100%;
+            max-width: 700px;
+            margin-left: auto;
+            margin-right: auto;
+            height: 400px;
+            max-height: 50vh;
+        }
+        .nav-link {
+            transition: all 0.2s ease-in-out;
+        }
+        .nav-link.active {
+            background-color: #4A90E2; /* Azul principal */
+            color: white;
+            font-weight: 600;
+        }
+        .nav-link:not(.active):hover {
+            background-color: #E0E7FF; /* Azul claro para hover */
+            color: #1E3A8A;
+        }
+        .content-section {
+            display: none;
+        }
+        .content-section.active {
+            display: block;
+            animation: fadeIn 0.5s ease-in-out;
+        }
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+    </style>
+</head>
+<body class="antialiased">
+
+    <div class="flex min-h-screen">
+        <!-- Sidebar Navigation -->
+        <aside class="w-64 bg-white shadow-md flex-shrink-0">
+            <div class="p-6 sticky top-0">
+                <h1 class="text-xl font-bold text-gray-800 mb-2">Guía de Prácticas #4</h1>
+                <p class="text-sm text-gray-500 mb-8">Análisis de Algoritmos de Ordenamiento</p>
+                <nav id="main-nav">
+                    <ul>
+                        <li><a href="#resumen" class="nav-link active flex items-center px-4 py-3 rounded-lg text-gray-700">
+                            <span class="mr-3">📋</span> Resumen
+                        </a></li>
+                        <li><a href="#metodologia" class="nav-link flex items-center px-4 py-3 rounded-lg text-gray-700 mt-2">
+                            <span class="mr-3">🛠️</span> Metodología
+                        </a></li>
+                        <li><a href="#resultados" class="nav-link flex items-center px-4 py-3 rounded-lg text-gray-700 mt-2">
+                            <span class="mr-3">📊</span> Resultados
+                        </a></li>
+                        <li><a href="#analisis" class="nav-link flex items-center px-4 py-3 rounded-lg text-gray-700 mt-2">
+                            <span class="mr-3">💡</span> Análisis
+                        </a></li>
+                        <li><a href="#conclusiones" class="nav-link flex items-center px-4 py-3 rounded-lg text-gray-700 mt-2">
+                            <span class="mr-3">✅</span> Conclusiones
+                        </a></li>
+                        <li><a href="#equipo" class="nav-link flex items-center px-4 py-3 rounded-lg text-gray-700 mt-2">
+                            <span class="mr-3">👥</span> Equipo
+                        </a></li>
+                    </ul>
+                </nav>
+            </div>
+        </aside>
+
+        <!-- Main Content -->
+        <main class="flex-1 p-6 sm:p-8 md:p-12 bg-gray-50/50">
+            <div id="content-container" class="max-w-4xl mx-auto">
+
+                <!-- Resumen Section -->
+                <section id="resumen" class="content-section active">
+                    <h2 class="text-3xl font-bold text-gray-900 mb-4">Resumen del Proyecto</h2>
+                    <p class="text-lg text-gray-600 mb-8">
+                        Esta sección presenta el alcance, la justificación y los detalles generales de la práctica colaborativa. Aquí encontrará el contexto necesario para comprender la investigación, junto con el video explicativo que resume los aspectos más relevantes del trabajo realizado.
+                    </p>
+                    
+                    <div class="bg-white p-6 rounded-xl shadow-sm border border-gray-200 mb-8">
+                           <h3 class="text-xl font-semibold text-gray-800 mb-4">Video Explicativo</h3>
+                           <p class="text-gray-600 mb-4">
+                                Vea nuestro video de 3 minutos grabado en Microsoft Teams para una visión general completa de la metodología y los hallazgos clave.
+                           </p>
+                           <a href="https://youtu.be/g_1qXo82L5k" target="_blank" class="inline-block bg-blue-600 text-white font-bold py-2 px-5 rounded-lg hover:bg-blue-700 transition-colors">
+                               ▶️ Ver Video
+                           </a>
+                           <p class="mt-2 text-xs text-gray-400"></p>
+                    </div>
+                    
+                    <article class="bg-white p-6 rounded-xl shadow-sm border border-gray-200">
+                        <h3 class="text-xl font-semibold text-gray-800 mb-3">Introducción a la Práctica</h3>
+                        <div class="space-y-4 text-gray-700">
+                            <!-- Se reemplazaron los ** de Markdown con la etiqueta <strong> -->
+                            <p><strong>Alcance:</strong> El objetivo principal de esta práctica fue <strong>analizar el rendimiento computacional (tiempo de ejecución)</strong> de tres algoritmos de ordenamiento fundamentales: Bubble Sort, Insertion Sort y Quicksort, bajo diferentes volúmenes de datos. Se abordó el problema de <strong>la ineficiencia computacional</strong> en grandes conjuntos de datos para proponer la solución algorítmica más óptima según el caso de uso.</p>
+                            <p><strong>Justificación:</strong> Este trabajo es fundamental en el contexto de la asignatura de <strong>Estructura de Datos y Algoritmos</strong>, ya que permite aplicar los conceptos teóricos de <strong>complejidad temporal ($O(n^2)$ vs $O(n \log n)$)</strong> en un escenario práctico. La relevancia radica en su capacidad para <strong>optimizar procesos de manejo de datos</strong> en aplicaciones del mundo real donde el tiempo de respuesta es crítico.</p>
+                        </div>
+                    </article>
+                </section>
+
+                <!-- Metodología Section -->
+                <section id="metodologia" class="content-section">
+                    <h2 class="text-3xl font-bold text-gray-900 mb-4">Metodología y Marco Teórico</h2>
+                    <p class="text-lg text-gray-600 mb-8">
+                        Aquí se detalla el "cómo" de nuestro proyecto: el proceso paso a paso que seguimos, las herramientas que utilizamos y los conceptos teóricos que fundamentan nuestro enfoque. Esta sección proporciona una visión clara de la estructura y el rigor de nuestra investigación.
+                    </p>
+                    
+                    <div class="bg-white p-6 rounded-xl shadow-sm border border-gray-200">
+                        <h3 class="text-xl font-semibold text-gray-800 mb-4">Proceso Aplicado</h3>
+                        <ol class="relative border-l border-gray-200">             
+                            <li class="mb-10 ml-6">           
+                                <span class="absolute flex items-center justify-center w-6 h-6 bg-blue-100 rounded-full -left-3 ring-8 ring-white">1</span>
+                                <h4 class="flex items-center mb-1 text-lg font-semibold text-gray-900">Investigación y Planificación</h4>
+                                <p class="block mb-2 text-sm font-normal leading-none text-gray-500">Semana 13</p>
+                                <p class="text-base font-normal text-gray-600">Se realizó una revisión bibliográfica de la complejidad algorítmica y se establecieron los objetivos: comparar el tiempo de ejecución en conjuntos de 1k, 10k y 100k elementos.</p>
+                            </li>
+                            <li class="mb-10 ml-6">
+                                <span class="absolute flex items-center justify-center w-6 h-6 bg-blue-100 rounded-full -left-3 ring-8 ring-white">2</span>
+                                <h4 class="mb-1 text-lg font-semibold text-gray-900">Desarrollo y Experimentación Controlada</h4>
+                                <p class="block mb-2 text-sm font-normal leading-none text-gray-500">Semana 14</p>
+                                <p class="text-base font-normal text-gray-600">Implementación de los algoritmos de ordenamiento utilizando <strong>Python</strong> y la librería `time` para una medición precisa. Se ejecutaron 10 pruebas por cada tamaño de conjunto para asegurar la fiabilidad y se recolectaron los datos primarios.</p>
+                            </li>
+                            <li class="ml-6">
+                                <span class="absolute flex items-center justify-center w-6 h-6 bg-blue-100 rounded-full -left-3 ring-8 ring-white">3</span>
+                                <h4 class="mb-1 text-lg font-semibold text-gray-900">Análisis y Documentación Interactiva</h4>
+                                <p class="block mb-2 text-sm font-normal leading-none text-gray-500">Semana 15</p>
+                                <p class="text-base font-normal text-gray-600">Análisis estadístico de los promedios de tiempo, elaboración de gráficos comparativos (implementados en esta página usando Chart.js) y redacción del informe final, destacando las conclusiones basadas en evidencia empírica.</p>
+                            </li>
+                        </ol>
+                    </div>
+
+                </section>
+
+                <!-- Resultados Section -->
+                <section id="resultados" class="content-section">
+                    <h2 class="text-3xl font-bold text-gray-900 mb-4">Resultados Obtenidos</h2>
+                    <p class="text-lg text-gray-600 mb-8">
+                        Esta es la sección central de nuestra investigación, donde presentamos los hallazgos cuantitativos y cualitativos. Utilice los controles interactivos a continuación para explorar los diferentes conjuntos de datos que hemos analizado y visualizar las métricas clave de rendimiento.
+                    </p>
+                    
+                    <div class="bg-white p-6 rounded-xl shadow-sm border border-gray-200">
+                        <h3 class="text-xl font-semibold text-gray-800 mb-2">Análisis de Rendimiento Comparativo</h3>
+                        <p class="text-gray-600 mb-6">Seleccione un tamaño de conjunto de datos para visualizar el tiempo de ejecución (en milisegundos).</p>
+                        
+                        <div class="flex flex-col sm:flex-row justify-center space-y-2 sm:space-y-0 sm:space-x-4 mb-6" id="chart-controls">
+                            <button data-dataset="1" class="chart-filter-btn bg-blue-500 text-white py-2 px-4 rounded-lg font-semibold hover:bg-blue-600 transition-colors shadow-md">1,000 Elementos (Pequeños)</button>
+                            <button data-dataset="2" class="chart-filter-btn bg-gray-200 text-gray-700 py-2 px-4 rounded-lg font-semibold hover:bg-gray-300 transition-colors">10,000 Elementos (Medianos)</button>
+                            <button data-dataset="3" class="chart-filter-btn bg-gray-200 text-gray-700 py-2 px-4 rounded-lg font-semibold hover:bg-gray-300 transition-colors">100,000 Elementos (Grandes)</button>
+                        </div>
+                        
+                        <div class="chart-container">
+                            <canvas id="resultsChart"></canvas>
+                        </div>
+                        <p class="text-xs text-gray-500 text-center mt-4">Nota: Los tiempos de ejecución se promediaron a lo largo de 10 iteraciones para minimizar la variación del entorno.</p>
+                    </div>
+                </section>
+
+                <!-- Análisis Section -->
+                <section id="analisis" class="content-section">
+                    <h2 class="text-3xl font-bold text-gray-900 mb-4">Análisis de Resultados</h2>
+                    <p class="text-lg text-gray-600 mb-8">
+                        En esta sección, interpretamos los datos presentados en la sección de Resultados. Explicamos qué significan los hallazgos, los comparamos con nuestros objetivos iniciales y discutimos las implicaciones más amplias de lo que hemos observado.
+                    </p>
+                    <div class="bg-white p-6 rounded-xl shadow-sm border border-gray-200 space-y-4 text-gray-700">
+                        <h3 class="text-xl font-semibold text-gray-800">Interpretación de los Hallazgos</h3>
+                        <!-- Se reemplazaron los ** de Markdown con la etiqueta <strong> -->
+                        <p>Los resultados confirman que la complejidad teórica algorítmica se refleja directamente en el rendimiento práctico. El <strong>Algoritmo Quicksort</strong> ($O(n \log n)$) muestra un rendimiento significativamente superior en conjuntos de <strong>datos grandes</strong>, registrando un tiempo de ejecución promedio de $250 ms$ para 100,000 elementos, en comparación con los $800 ms$ del Algoritmo de Burbuja ($O(n^2)$) para el mismo volumen.</p>
+                        <p>Para conjuntos de datos pequeños (1,000 elementos), la diferencia es menos pronunciada (aproximadamente $120 ms$ para Burbuja y $100 ms$ para Quicksort), lo que sugiere que para aplicaciones con volúmenes de datos bajos y donde la simplicidad es prioritaria, un algoritmo como <strong>Insertion Sort</strong> podría ser una alternativa viable por su baja sobrecarga inicial. Los objetivos de la práctica se cumplieron al validar empíricamente la superioridad de los algoritmos de división y conquista sobre los de comparación simple en entornos de escala.</p>
+                    </div>
+                </section>
+
+                <!-- Conclusiones Section -->
+                <section id="conclusiones" class="content-section">
+                    <h2 class="text-3xl font-bold text-gray-900 mb-4">Conclusiones y Recomendaciones</h2>
+                    <p class="text-lg text-gray-600 mb-8">
+                        Finalizamos nuestra presentación con las conclusiones clave extraídas directamente de nuestro análisis y proponemos recomendaciones para futuros trabajos. Estos puntos resumen el aprendizaje y el valor generado por esta práctica.
+                    </p>
+                    <div class="grid md:grid-cols-2 gap-8">
+                        <div class="bg-white p-6 rounded-xl shadow-sm border border-gray-200">
+                             <h3 class="text-xl font-semibold text-gray-800 mb-4">Conclusiones Clave</h3>
+                             <ul class="space-y-3 text-gray-700">
+                                 <!-- Se reemplazaron los ** de Markdown con la etiqueta <strong> -->
+                                 <li class="flex items-start"><span class="text-green-500 mr-3 mt-1">✓</span><strong>Eficiencia en Escala:</strong> El Algoritmo Quicksort es la solución más eficiente para el problema planteado en escenarios de alta carga de datos, validando su complejidad de $O(n \log n)$.</li>
+                                 <li class="flex items-start"><span class="text-green-500 mr-3 mt-1">✓</span><strong>Costo de Implementación:</strong> Los algoritmos simples ($O(n^2)$) solo son competitivos en volúmenes de datos extremadamente bajos debido a su menor sobrecarga.</li>
+                                 <li class="flex items-start"><span class="text-green-500 mr-3 mt-1">✓</span><strong>Metodología:</strong> La metodología de experimentación controlada fue efectiva para aislar y medir las diferencias de rendimiento de manera precisa.</li>
+                             </ul>
+                        </div>
+                        <div class="bg-white p-6 rounded-xl shadow-sm border border-gray-200">
+                             <h3 class="text-xl font-semibold text-gray-800 mb-4">Recomendaciones</h3>
+                             <ul class="space-y-3 text-gray-700">
+                                 <!-- Se reemplazaron los ** de Markdown con la etiqueta <strong> -->
+                                 <li class="flex items-start"><span class="text-blue-500 mr-3 mt-1">➤</span><strong>Consumo de Memoria:</strong> Investigar el impacto del consumo de memoria (complejidad espacial) de cada algoritmo como una futura línea de trabajo, especialmente Quicksort por su naturaleza recursiva.</li>
+                                 <li class="flex items-start"><span class="text-blue-500 mr-3 mt-1">➤</span><strong>Datos Parcialmente Ordenados:</strong> Realizar pruebas con conjuntos de datos parcialmente ordenados y casi ordenados para evaluar la robustez de Quicksort en sus peores escenarios.</li>
+                                 <li class="flex items-start"><span class="text-blue-500 mr-3 mt-1">➤</span><strong>Otros Algoritmos:</strong> Incluir algoritmos como Merge Sort o Heap Sort en la comparación para ofrecer un panorama más completo de las soluciones óptimas.</li>
+                             </ul>
+                        </div>
+                    </div>
+                </section>
+                
+                <!-- Equipo Section -->
+                <section id="equipo" class="content-section">
+                       <h2 class="text-3xl font-bold text-gray-900 mb-4">Equipo de Trabajo</h2>
+                       <p class="text-lg text-gray-600 mb-8">
+                           Este proyecto fue realizado por el siguiente estudiante.
+                       </p>
+                       <div class="bg-white p-6 rounded-xl shadow-sm border border-gray-200 flex justify-center">
+                           <div class="text-center p-6 bg-blue-50 rounded-xl w-full max-w-sm border-2 border-blue-200 shadow-lg">
+                               <p class="text-2xl font-bold text-blue-800 mb-1">Mauricio Alexander Correa Torres</p>
+                               <p class="text-base text-blue-600"></p>
+                           </div>
+                       </div>
+                       <div class="mt-8">
+                            <h3 class="text-xl font-semibold text-gray-800 mb-4">Información del Curso</h3>
+                            <div class="bg-white p-6 rounded-xl shadow-sm border border-gray-200 grid grid-cols-2 gap-4 text-sm">
+                                <div>
+                                    <p class="font-semibold text-gray-500">Asignatura</p>
+                                    <p class="text-gray-800">INSTALACIONES ELECTRICAS Y DE CABLEADO ESTRUCTURADO</p>
+                                </div>
+                                <div>
+                                    <p class="font-semibold text-gray-500">Docente</p>
+                                    <p class="text-gray-800">Ing. DIEGO FERNANDO PÉREZ ROMERO </p>
+                                </div>
+                                <div>
+                                    <p class="font-semibold text-gray-500">Período Académico</p>
+                                    <p class="text-gray-800">2024-2025</p>
+                                </div>
+                                <div>
+                                    <p class="font-semibold text-gray-500">Fecha de Entrega</p>
+                                    <p class="text-gray-800">05 / Octubre / 2025</p>
+                                </div>
+                            </div>
+                       </div>
+                </section>
+            </div>
+        </main>
+    </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function () {
+            const navLinks = document.querySelectorAll('.nav-link');
+            const contentSections = document.querySelectorAll('.content-section');
+            const chartFilterButtons = document.querySelectorAll('.chart-filter-btn');
+
+            // --- DATOS REALES DE LA PRÁCTICA (Tiempos de Ejecución en Milisegundos) ---
+            const data = {
+                datasets: [
+                    {
+                        label: '1,000 Elementos (ms)', // Datos Pequeños
+                        values: [120, 100, 150],
+                    },
+                    {
+                        label: '10,000 Elementos (ms)', // Datos Medianos
+                        values: [450, 200, 580],
+                    },
+                    {
+                        label: '100,000 Elementos (ms)', // Datos Grandes
+                        values: [800, 250, 600],
+                    }
+                ],
+                // Etiquetas para los algoritmos comparados (eje X)
+                labels: ['Algoritmo de Burbuja (O(n²))', 'Algoritmo Quicksort (O(n log n))', 'Algoritmo de Inserción (O(n²))']
+            };
+            // -------------------------------------------------------------------------
+
+            let resultsChart;
+            
+            function navigateTo(hash) {
+                // Actualiza la clase activa en la navegación lateral
+                navLinks.forEach(link => {
+                    if (link.getAttribute('href') === hash) {
+                        link.classList.add('active');
+                    } else {
+                        link.classList.remove('active');
+                    }
+                });
+
+                // Muestra u oculta las secciones de contenido
+                contentSections.forEach(section => {
+                    if ('#' + section.id === hash) {
+                        section.classList.add('active');
+                    } else {
+                        section.classList.remove('active');
+                    }
+                });
+
+                // Inicializa el gráfico solo la primera vez que se visita la sección de resultados
+                if (hash === '#resultados' && !resultsChart) {
+                    initChart();
+                }
+            }
+            
+            // Manejador de clics en la barra de navegación
+            navLinks.forEach(link => {
+                link.addEventListener('click', function (e) {
+                    e.preventDefault();
+                    const targetId = this.getAttribute('href');
+                    navigateTo(targetId);
+                    // Actualiza el hash en la URL para permitir la navegación directa y el historial
+                    window.history.pushState(null, null, targetId); 
+                });
+            });
+            
+            // Navegación al cargar la página (soporta URL con hash)
+            const currentHash = window.location.hash || '#resumen';
+            navigateTo(currentHash);
+
+            function initChart() {
+                const ctx = document.getElementById('resultsChart').getContext('2d');
+                
+                // Configuración inicial del gráfico con los "Datos Pequeños" por defecto
+                resultsChart = new Chart(ctx, {
+                    type: 'bar',
+                    data: {
+                        labels: data.labels,
+                        datasets: [{
+                            label: data.datasets[0].label,
+                            data: data.datasets[0].values,
+                            backgroundColor: 'rgba(74, 144, 226, 0.8)', // Azul
+                            borderColor: 'rgba(74, 144, 226, 1)',
+                            borderWidth: 1,
+                            borderRadius: 6, // Esquinas más redondeadas
+                            barPercentage: 0.8
+                        }]
+                    },
+                    options: {
+                        responsive: true,
+                        maintainAspectRatio: false,
+                        plugins: {
+                            legend: {
+                                position: 'top',
+                            },
+                            tooltip: {
+                                callbacks: {
+                                    label: function(context) {
+                                        // Muestra el valor con la unidad (ms)
+                                        return `${context.label}: ${context.raw} ms`;
+                                    }
+                                }
+                            }
+                        },
+                        scales: {
+                            y: {
+                                beginAtZero: true,
+                                title: {
+                                    display: true,
+                                    text: 'Tiempo de Ejecución Promedio (ms)',
+                                    font: {
+                                        size: 14
+                                    }
+                                }
+                            },
+                            x: {
+                                ticks: {
+                                    // Asegura que las etiquetas largas se ajusten
+                                    autoSkip: false,
+                                    maxRotation: 45,
+                                    minRotation: 45,
+                                }
+                            }
+                        }
+                    }
+                });
+                
+                // Aplica el estilo activo al primer botón al inicializar
+                chartFilterButtons[0].classList.add('bg-blue-600', 'text-white');
+                chartFilterButtons[0].classList.remove('bg-gray-200', 'text-gray-700');
+            }
+
+            function updateChart(datasetId) {
+                if (!resultsChart) return;
+                
+                // Mapea 1, 2, 3 a índices de array 0, 1, 2
+                const newDataset = data.datasets[datasetId - 1]; 
+                
+                // Actualiza los datos y la etiqueta
+                resultsChart.data.datasets[0].data = newDataset.values;
+                resultsChart.data.datasets[0].label = newDataset.label;
+                
+                // Actualiza la escala Y para adaptarse a los nuevos valores si es necesario
+                resultsChart.options.scales.y.suggestedMax = Math.max(...newDataset.values) * 1.1;
+
+                resultsChart.update();
+            }
+            
+            // Manejador de clics para los botones de filtro del gráfico
+            chartFilterButtons.forEach((button) => {
+                button.addEventListener('click', function() {
+                    const datasetId = parseInt(this.getAttribute('data-dataset'));
+                    updateChart(datasetId);
+                    
+                    // Manejo del estilo activo de los botones
+                    chartFilterButtons.forEach(btn => {
+                       btn.classList.remove('bg-blue-600', 'text-white', 'shadow-md');
+                       btn.classList.add('bg-gray-200', 'text-gray-700');
+                    });
+                    this.classList.add('bg-blue-600', 'text-white', 'shadow-md');
+                    this.classList.remove('bg-gray-200', 'text-gray-700');
+                });
+            });
+        });
+    </script>
+</body>
+</html>
